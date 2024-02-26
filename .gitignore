@@ -1,0 +1,5 @@
+.DS_Store
+deployment/
+deployment-old/
+notes.*
+__pycache__

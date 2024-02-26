@@ -1,3 +1,8 @@
+"""
+NOTE: THIS WRAPPER EXPECTS AN HTTP TRIGGER IN GOOGLE GCLOUD FUNCTIONS <==> ASSUMES SYNC INVOKATION
+=> PROBABLY NOT NECESSARY ANYMORE AND SHOULD BE DELETED?
+"""
+
 from wrapper import *
 from main import handler
 
@@ -17,7 +22,6 @@ def hello_http(request):
         <https://flask.palletsprojects.com/en/1.1.x/api/#flask.make_response>.
     """
     request_json = request.get_json(silent=True)
-    #request_args = request.args
 
     workflow = request_json["workflow"]
     try:

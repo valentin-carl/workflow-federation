@@ -1,0 +1,92 @@
+{
+    "functions": {
+        "check": {
+            "handler": "./functions/check/main.py",
+            "requirements": "./functions/check/requirements.txt",
+            "provider": "AWS",
+            "region": "us-east-1",
+            "service": "check-service"
+        },
+        "virus": {
+            "handler": "./functions/virus/main.py",
+            "requirements": "./functions/virus/requirements.txt",
+            "provider": "google",
+            "service": "virus-service",
+            "region": "europe-west10-a"
+        },
+        "ocr": {
+            "handler": "./functions/ocr/main.py",
+            "requirements": "./functions/ocr/requirements.txt",
+            "provider": "AWS",
+            "args": {
+                "docker": true,
+                "async": true
+            },
+            "region": "us-east-1",
+            "service": "ocr-service"
+        },
+        "email": {
+            "handler": "./functions/email/main.py",
+            "requirements": "./functions/email/requirements.txt",
+            "provider": "tinyFaaS",
+            "service": "email-service",
+            "tinyFaaS_options": {
+                "env": "python3",
+                "threads": 1,
+                "source": "",
+                "deployTo": [
+                    "tf-node-0"
+                ]
+            }
+        },
+        "tinyFaaS-example": {
+            "handler": "./just/an/example/main.py",
+            "requirements": "./just/an/example/requirements.txt",
+            "provider": "tinyFaaS",
+            "tinyFaaS_options": {
+                "env": "python3",
+                "threads": 1,
+                "source": "",
+                "deployTo": [
+                    "tf-node-0", 
+                    "tf-node-1"
+                ]
+            }
+        }
+    },
+    "providers": {
+        "AWS": {
+            "credentials": {
+                "...": "..."
+            },
+            "environment": {
+                "HALLO": "WELT",
+                "DAS SOLL": "KEINE LISTE SEIN, das ist mit absicht"
+            }
+        }, 
+        "GCP": {
+            "credentials": {
+                "...": "..."
+            },
+            "project": "workflow-project"
+        }, 
+        "tinyFaaS": {
+            "nodes": [
+                {
+                    "name": "tf-node-0",
+                    "url": "http://127.0.0.1:8080"
+                },
+                {
+                    "name": "tf-node-1",
+                    "url": "..."
+                }
+            ]
+        }
+    },
+    "serverless": {
+        "org": "valentincarl",
+        "app": "pdf-workflow",
+        "frameworkVersion": 3,
+        "project": "my-project"
+    }
+}

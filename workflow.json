@@ -1,0 +1,28 @@
+{
+    "steps": [
+        {
+            "id": 0,
+            "function_name": "check",
+            "pre-fetch": true,
+            "url": "..."
+        },
+        {
+            "id": 1,
+            "function_name": "virus",
+            "pre-fetch": true,
+            "url": "..."
+        },
+        {
+            "id": 2,
+            "function_name": "ocr",
+            "pre-fetch": true,
+            "url": "..."
+        },
+        {
+            "id": 3,
+            "function_name": "email",
+            "pre-fetch": true,
+            "url": "..."
+        }
+    ]
+}

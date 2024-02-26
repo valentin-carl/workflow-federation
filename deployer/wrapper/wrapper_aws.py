@@ -1,4 +1,3 @@
-# TODO make sure imports work as intended
 from main import handler # main is supposed to be in the same dir (doesn't reference deploymer.main but a main.py with the handler function)
 from wrapper import *    # import all workflow functions
 

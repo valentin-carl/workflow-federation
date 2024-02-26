@@ -2,4 +2,5 @@
 deployment/
 deployment-old/
 notes.*
+*/notes.*
 __pycache__

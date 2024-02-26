@@ -1,34 +1,37 @@
-import typing
-import json
-
-from wrapper import *
+# might look like error here but file will be moved, which makes import correct
 from main import handler
+import wrapper
+import functions_framework
 
 
-def wrapper_tinyfaas(event: typing.Optional[str]) -> typing.Optional[str]:
+@functions_framework.cloud_event
+def wrapper_gcp(cloud_event):
 
-    """
-    event is None or a string containing the usual workflow data + input in json format
-    """
-
-    assert event is not None
-
-    inputDict = json.loads(event)
-    workflow = inputDict["workflow"]
+    # get data & workflow
     try:
-        input = inputDict["body"] # function args | might not be part of event if this function pre-fetches
-    except KeyError:
-        print("no function input: this function pre-fetches data or takes no arguments")
+        workflow = cloud_event.data["workflow"]
+    except KeyError as e:
+        print("workflow information missing; error")
+        print(e)
+        return {
+            "statusCode": 400
+        }
+    try:
+        input = cloud_event.data["body"]
+    except KeyError as e:
+        print("no function input -- assuming intentional")
+        print(e)
         input = None
 
     # 1) update workflow: remove the current step
-    updated_workflow = update_workflow(workflow)
+    updated_workflow = wrapper.update_workflow(workflow)
 
     # 2) if the next step pre-fetches data, call it here
     #   => this means it will get the actual function input from somewhere else (if any is expected)
-    current_step = get_current_step(workflow)
+    current_step = wrapper.get_current_step(workflow)
     if current_step["pre-fetch"]:
-        invoke_next(updated_workflow, None)
+        # None input because not known yet
+        wrapper.invoke_next(updated_workflow, None)
 
     # 3) if this current step pre-fetches
     #   a) pre-fetch the data
@@ -36,11 +39,11 @@ def wrapper_tinyfaas(event: typing.Optional[str]) -> typing.Optional[str]:
     data = None
     if current_step["pre-fetch"]:
         print("pre-fetching data")
-        data = prefetch_data(current_step)
+        data = wrapper.prefetch_data(current_step)
         # there might be some time between when the pre-fetching is done and when the inputs are ready
         # this means we might wait here a bit
         print("retreiving function input")
-        input = get_function_input(current_step)
+        input = wrapper.get_function_input(current_step)
     else:
         print("nothing to pre-fetch")
 
@@ -49,19 +52,16 @@ def wrapper_tinyfaas(event: typing.Optional[str]) -> typing.Optional[str]:
     result = handler(data, input)
 
     # 5) if the next step pre-fetches, upload the function input to somehwere the next step can find it
-    # => the next step will have already been invoked earlier
-    next = get_next_step(workflow)
+    # => the next step will have already been invoked earlier (without any function input)
+    next = wrapper.get_next_step(workflow)
     if next is not None:
-        if get_next_step(workflow)["pre-fetch"]:
+        if wrapper.get_next_step(workflow)["pre-fetch"]:
             print("uploading function input")
-            upload_function_input(result)
+            wrapper.upload_function_input(result)
         # else invoke the next step with {"workflow": ..., "body": handler_output}
         else:
+            # next function hasn't been invoked yet
             print("invoking next step")
-            invoke_next(workflow, result)
+            wrapper.invoke_next(workflow, result)
     else:
         print("reached end of workflow")
-
-    return json.dumps({
-        "statusCode": 200,
-    })

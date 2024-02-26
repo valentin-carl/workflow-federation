@@ -48,6 +48,7 @@ def upload_function_input(input: dict) -> None:
     pass
 
 def invoke_next(function: dict, input: dict) -> dict:
+    # TODO change inputs according to how function is actually used in function wrappers
 
     """
     this function assumes that the url for the next function triggers async invocation

@@ -5,7 +5,8 @@ from wrapper import *
 from main import handler
 
 
-def wrapper_tinyfaas(event: typing.Optional[str]) -> typing.Optional[str]:
+# has to called 'fn' because tinyfaas' python runtime tries to import a function 'fn'
+def fn(event: typing.Optional[str]) -> typing.Optional[str]:
 
     """
     event is None or a string containing the usual workflow data + input in json format

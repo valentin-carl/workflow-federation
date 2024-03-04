@@ -20,7 +20,7 @@ class DeploymentPlatform:
 class Serverless:
     org: str
     app: str
-    frameworkVersion: int
+    frameworkVersion: str
 
 
 class TinyFaaSEnv(Enum):

@@ -1,5 +1,5 @@
 # might look like error here but file will be moved, which makes import correct
-from main import handler
+from user_main import handler
 import wrapper
 import functions_framework
 

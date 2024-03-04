@@ -1,21 +1,21 @@
 {
     "functions": {
         "check": {
-            "handler": "./functions/check/main.py",
+            "handler": "wrapper_aws.wrapper_aws",
             "requirements": "./functions/check/requirements.txt",
             "provider": "AWS",
             "region": "us-east-1",
             "service": "check-service"
         },
         "virus": {
-            "handler": "./functions/virus/main.py",
+            "handler": "wrapper_gcp_pubsub.wrapper_gcp",
             "requirements": "./functions/virus/requirements.txt",
             "provider": "google",
             "service": "virus-service",
             "region": "europe-west10-a"
         },
         "ocr": {
-            "handler": "./functions/ocr/main.py",
+            "handler": "wrapper_aws.wrapper_aws",
             "requirements": "./functions/ocr/requirements.txt",
             "provider": "AWS",
             "args": {
@@ -48,8 +48,12 @@
                 "threads": 1,
                 "source": "",
                 "deployTo": [
-                    "tf-node-0", 
-                    "tf-node-1"
+                    {
+                        "name": "tf-node-0"
+                    },
+                    {
+                        "name": "tf-node-1"
+                    }
                 ]
             }
         }
@@ -68,7 +72,7 @@
             "credentials": {
                 "...": "..."
             },
-            "project": "workflow-project"
+            "project": "workflows-413409"
         }, 
         "tinyFaaS": {
             "nodes": [
@@ -86,7 +90,7 @@
     "serverless": {
         "org": "valentincarl",
         "app": "pdf-workflow",
-        "frameworkVersion": 3,
+        "frameworkVersion": "3",
         "project": "my-project"
     }
 }

@@ -23,6 +23,7 @@ def get_current_step(workflow: dict) -> dict:
             min = function
     return min
 
+
 def update_workflow(workflow: dict) -> dict:
     """
     :return: updated workflow and the current step
@@ -32,6 +33,7 @@ def update_workflow(workflow: dict) -> dict:
     steps.remove(current)
     workflow["steps"] = steps
     return workflow
+
 
 def get_next_step(workflow: dict) -> dict:
     """
@@ -47,6 +49,7 @@ def get_next_step(workflow: dict) -> dict:
 def upload_function_input(input: dict) -> None:
     pass
 
+
 def invoke_next(function: dict, input: dict) -> dict:
     # TODO change inputs according to how function is actually used in function wrappers
 
@@ -56,8 +59,10 @@ def invoke_next(function: dict, input: dict) -> dict:
 
     pass
 
+
 def prefetch_data(current_step: dict) -> None:
     pass
+
 
 def get_function_input(current_step: dict) -> dict:
     pass

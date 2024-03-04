@@ -185,7 +185,7 @@ def handle_aws_requirements(requirementsPath: str, targetDir: str) -> None:
         sys.exit(1)
 
 
-def generate_serverless_compose(functions: list[Function]) -> str:
+def generate_serverless_compose(functions: list[str]) -> str:
     res = {"services": {}}
     for function in functions:
         res["services"][f"{function}-service"] = {"path": function}
@@ -214,6 +214,8 @@ def main() -> None:
     else:
         print("error: deployment directory already exists.")
         sys.exit(1)
+
+    deployed_fns = []
 
     # create new subdir for each function structure according to provider
     for function in functions.keys():
@@ -351,8 +353,11 @@ def main() -> None:
                 dst = f"../deployment/{fn.name}/functions/{fn.name}/requirements.txt"
                 shutil.copyfile(src, dst)
 
+        # store to create serverless compose yml later
+        deployed_fns.append(fn.name)
+
     # generate the serverless compose file
-    sc = generate_serverless_compose(functions.keys())
+    sc = generate_serverless_compose(deployed_fns)
     print(sc)
     with open(f"../deployment/serverless-compose.yml", "w") as file:
         file.write(dict2yaml(sc))
